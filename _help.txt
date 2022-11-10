@@ -1,0 +1,22 @@
+Сгененрировать ключ и добавить его на сервер
+
+sudo apt-get update && sudo apt-get install openssh-client
+ssh-keygen
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@176.57.69.55
+
+-----
+
+Работа с несколькими терминалами
+
+запуск : screen
+просмотр : screen -ls
+возвращение : screen -r id
+выход : screen ctrl+a d
+
+-----
+
+Работа с контейнерами докера
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -a -q)
