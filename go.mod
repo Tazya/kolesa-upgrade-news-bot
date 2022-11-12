@@ -1,3 +1,3 @@
-module kolesa-upgrade/bot-messenger
+module kolesa-upgrade-team/delivery-bot
 
 go 1.19

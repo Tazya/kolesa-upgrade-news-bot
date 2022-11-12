@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"os"
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -13,4 +14,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
+	fileBytes, err := os.ReadFile("Hello.jpg")
+	if err != nil {
+		panic(err)
+	}
+	w.Write(fileBytes)
 }
