@@ -11,6 +11,7 @@ func Health(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	response := map[string]string{
 		"status": "ok",
 	}
@@ -20,5 +21,4 @@ func Health(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(jsonResp)
-	return
 }
