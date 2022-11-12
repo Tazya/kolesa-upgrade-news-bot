@@ -1,4 +1,5 @@
 FROM golang:1.19-alpine as builder
+
 WORKDIR /build
 
 ADD Hello.jpg ./
@@ -18,4 +19,9 @@ RUN apk update --no-cache && apk add --no-cache ca-certificates
 COPY --from=builder /build/app /usr/local/bin/
 COPY --from=builder /build/Hello.jpg ./
 
-CMD /usr/local/bin/app --port $PORT
+ARG PORT
+
+RUN mkdir config
+RUN echo "Port=\"$PORT\"" > ./config/port.toml
+
+CMD /usr/local/bin/app

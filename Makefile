@@ -1,6 +1,9 @@
-# собрать контейнер
-build:
-	docker build -t hello:v1 .
-# запустить контейнер
+SHELL=CMD
+
+# собрать контейнер с проброской порта
+build: 
+	docker build --build-arg PORT=$(port) -t hello:v1 .
+# запустить контейнер с проброской порта 
 run:
-	docker run --env PORT=8888 -it --rm -p 8888:8888 hello:v1
+	docker run --env PORT=$(port) -it --rm -p $(port):$(port) hello:v1
+
