@@ -21,7 +21,4 @@ COPY --from=builder /build/Hello.jpg ./
 
 ARG PORT
 
-RUN mkdir config
-RUN echo "Port=\"$PORT\"" > ./config/port.toml
-
-CMD /usr/local/bin/app
+CMD /usr/local/bin/app port=$PORT

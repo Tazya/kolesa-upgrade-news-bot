@@ -1,13 +1,16 @@
 package main
 
 import (
+	"kolesa-upgrade-team/delivery-bot/config"
 	"kolesa-upgrade-team/delivery-bot/internal/app"
 	"log"
 )
 
 func main() {
 
-	if err := app.Run(); err != nil {
+	config := &config.Config{}
+
+	if err := app.Run(config.Port); err != nil {
 		log.Fatalf("%v", err)
 	}
 }
