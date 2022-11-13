@@ -1,13 +1,15 @@
 package app
 
 import (
+	"kolesa-upgrade-team/delivery-bot/config"
 	"kolesa-upgrade-team/delivery-bot/internal/server"
 	"log"
 )
 
-func Run(port string) error {
+func Run(config *config.Config) error {
 
-	s := server.NewServer(port)
-	log.Printf("http://localhost:" + port + "/")
+	s := server.NewServer(config)
+	log.Printf("http://localhost:" + config.Port + "/")
 	return s.ListenAndServe()
+
 }
