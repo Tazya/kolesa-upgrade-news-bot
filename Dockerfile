@@ -21,4 +21,4 @@ COPY --from=builder /build/Hello.jpg ./
 
 ARG PORT
 
-CMD /usr/local/bin/app port=$PORT
+CMD /usr/local/bin/app -port=$PORT
