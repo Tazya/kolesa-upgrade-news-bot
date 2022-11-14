@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func Run(config *config.Config) error {
+func Run(config *config.Config_server) error {
 
 	s := server.NewServer(config)
 	log.Printf("http://localhost:" + config.Port + "/")

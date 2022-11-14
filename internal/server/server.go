@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func NewServer(config *config.Config) *http.Server {
+func NewServer(config *config.Config_server) *http.Server {
 
 	mux := http.NewServeMux()
 	handlers.InitRoutes(mux)
