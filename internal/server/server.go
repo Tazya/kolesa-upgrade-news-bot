@@ -1,15 +1,17 @@
 package server
 
 import (
+	"kolesa-upgrade-team/delivery-bot/config"
 	"kolesa-upgrade-team/delivery-bot/http/handlers"
 	"net/http"
 )
 
-func NewServer() *http.Server {
+func NewServer(config *config.Config) *http.Server {
+
 	mux := http.NewServeMux()
 	handlers.InitRoutes(mux)
 	return &http.Server{
-		Addr:    ":8888",
+		Addr:    ":" + config.Port,
 		Handler: mux,
 	}
 }
