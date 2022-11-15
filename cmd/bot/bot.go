@@ -37,7 +37,11 @@ func (bot *UpgradeBot) StartHandler(ctx telebot.Context) error {
 		}
 	}
 
-	return ctx.Send("Привет, " + ctx.Sender().FirstName + " =^_^=\n Пока я только здороваюсь.")
+	return ctx.Send("Привет, я дружелюбный бот. Мои команды /hello")
+}
+
+func (bot *UpgradeBot) HelloHandler(ctx telebot.Context) error {
+	return ctx.Send("Привет, " + ctx.Sender().FirstName + " =^_^=")
 }
 
 func InitBot(token string) *telebot.Bot {

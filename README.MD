@@ -13,7 +13,7 @@
 
 ```
 make build
-make run port=1234
+make run port=1234 config="config/local.toml"
 ```
 
 2) Хэндлеры написаны для двух роутов

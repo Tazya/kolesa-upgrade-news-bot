@@ -15,10 +15,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func run_server(wg *sync.WaitGroup) {
+func run_server(port *string, wg *sync.WaitGroup) {
 	config_server := &config.Config_server{}
-	port := flag.String("port", "8888", "HTTP port")
-	flag.Parse()
 	config_server.Port = *port
 
 	if err := app.Run(config_server); err != nil {
@@ -26,9 +24,7 @@ func run_server(wg *sync.WaitGroup) {
 	}
 }
 
-func run_bot(wg *sync.WaitGroup) {
-	configPath := flag.String("config", "config/local.toml", "Path to config file")
-	flag.Parse()
+func run_bot(configPath *string, wg *sync.WaitGroup) {
 
 	config_bot := &config.Config_bot{}
 	_, err := toml.DecodeFile(*configPath, config_bot)
@@ -57,15 +53,21 @@ func run_bot(wg *sync.WaitGroup) {
 		Tasks: &models.TaskModel{Db: db},
 	}
 
-	upgradeBot.Bot.Handle("/hello", upgradeBot.StartHandler)
+	upgradeBot.Bot.Handle("/start", upgradeBot.StartHandler)
+	upgradeBot.Bot.Handle("/hello", upgradeBot.HelloHandler)
 
 	upgradeBot.Bot.Start()
 }
 
 func main() {
+
+	port := flag.String("port", "8888", "HTTP port")
+	configPath := flag.String("config", "config/local.toml", "Path to config file")
+	flag.Parse()
+
 	var wg sync.WaitGroup
 	wg.Add(2)
-	go run_server(&wg)
-	go run_bot(&wg)
+	go run_server(port, &wg)
+	go run_bot(configPath, &wg)
 	wg.Wait()
 }

@@ -12,19 +12,8 @@ CREATE TABLE
         chat_id INT
     );
 
--- создаём таблицу задач
-CREATE TABLE
-    tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title varchar(255),
-        description varchar(255),
-        end_date date,
-        user_id INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
 .quit 
 
-sqlite3 upgrade.db 
-
-DELETE FROM users WHERE id == 1;
+-- если надо удалить кого-то
+-- sqlite3 upgrade.db 
+-- DELETE FROM users WHERE id == 1;
