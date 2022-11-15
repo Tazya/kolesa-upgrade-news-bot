@@ -1,17 +1,21 @@
 package bot
 
 import (
+	"kolesa-upgrade-team/delivery-bot/config"
 	"kolesa-upgrade-team/delivery-bot/internal/models"
 	"log"
+	"os"
+	"sync"
 	"time"
 
 	"gopkg.in/telebot.v3"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 type UpgradeBot struct {
 	Bot   *telebot.Bot
 	Users *models.UserModel
-	Tasks *models.TaskModel
 }
 
 func (bot *UpgradeBot) StartHandler(ctx telebot.Context) error {
@@ -57,4 +61,31 @@ func InitBot(token string) *telebot.Bot {
 	}
 
 	return bot
+}
+
+func Run(config *config.Config, wg *sync.WaitGroup) {
+
+	db, err := gorm.Open(sqlite.Open(config.Dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatalf("Ошибка подключения к БД %v", err)
+	}
+
+	if config.BotToken == "" {
+		token, err := os.ReadFile("config/token.txt")
+		if err != nil {
+			log.Fatal(err)
+		}
+		config.BotToken = string(token)
+	}
+
+	upgradeBot := UpgradeBot{
+		Bot:   InitBot(config.BotToken),
+		Users: &models.UserModel{Db: db},
+	}
+
+	upgradeBot.Bot.Handle("/start", upgradeBot.StartHandler)
+	upgradeBot.Bot.Handle("/hello", upgradeBot.HelloHandler)
+
+	upgradeBot.Bot.Start()
 }

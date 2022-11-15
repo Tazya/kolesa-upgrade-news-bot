@@ -1,11 +1,7 @@
 package config
 
-type Config_server struct {
-	Port string
-}
-
-type Config_bot struct {
-	Env      string
+type Config struct {
+	Port     string
 	BotToken string
 	Dsn      string
 }
