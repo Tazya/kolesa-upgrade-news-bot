@@ -64,7 +64,6 @@ func InitBot(token string) *telebot.Bot {
 }
 
 func Run(config *config.Config, wg *sync.WaitGroup) {
-
 	db, err := gorm.Open(sqlite.Open(config.Dsn), &gorm.Config{})
 
 	if err != nil {
@@ -86,6 +85,5 @@ func Run(config *config.Config, wg *sync.WaitGroup) {
 
 	upgradeBot.Bot.Handle("/start", upgradeBot.StartHandler)
 	upgradeBot.Bot.Handle("/hello", upgradeBot.HelloHandler)
-
 	upgradeBot.Bot.Start()
 }

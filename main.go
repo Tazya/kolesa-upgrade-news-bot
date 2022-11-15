@@ -7,7 +7,6 @@ import (
 	"kolesa-upgrade-team/delivery-bot/internal/app"
 	"log"
 	"sync"
-
 	"github.com/BurntSushi/toml"
 )
 

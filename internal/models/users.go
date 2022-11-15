@@ -16,7 +16,6 @@ type UserModel struct {
 }
 
 func (m *UserModel) Create(user User) error {
-
 	result := m.Db.Create(&user)
 
 	return result.Error
@@ -24,7 +23,6 @@ func (m *UserModel) Create(user User) error {
 
 func (m *UserModel) FindOne(telegramId int64) (*User, error) {
 	existUser := User{}
-
 	result := m.Db.First(&existUser, User{TelegramId: telegramId})
 
 	if result.Error != nil {
