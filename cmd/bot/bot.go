@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"gopkg.in/telebot.v3"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -30,7 +30,7 @@ func (bot *UpgradeBot) StartHandler(ctx telebot.Context) error {
 	existUser, err := bot.Users.FindOne(ctx.Chat().ID)
 
 	if err != nil {
-		log.Printf("Ошибка получения пользователя %v", err)
+		log.Printf("Ошибка получения пользователя %v.\n Создаю нового =O_o=", err)
 	}
 
 	if existUser == nil {
@@ -64,7 +64,16 @@ func InitBot(token string) *telebot.Bot {
 }
 
 func Run(config *config.Config, wg *sync.WaitGroup) {
-	db, err := gorm.Open(sqlite.Open(config.Dsn), &gorm.Config{})
+	if config.DbPassword == "" {
+		password, err := os.ReadFile("config/DbPassword.txt")
+		if err != nil {
+			log.Fatal(err)
+		}
+		config.DbPassword = string(password)
+	}
+	
+	Dsn := config.DbUser + ":" + config.DbPassword + "@tcp(" + config.DbHost + ":" + config.DbPort + ")/" + config.DbName
+	db, err := gorm.Open(mysql.Open(Dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД %v", err)

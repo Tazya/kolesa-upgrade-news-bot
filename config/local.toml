@@ -1,2 +1,5 @@
 BotToken=""
-Dsn="DB/upgrade.db"
+DbUser="root"
+DbPassword=""
+DbPort="3306"
+DbName="news_bot"

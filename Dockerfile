@@ -10,7 +10,7 @@ WORKDIR /build
 ADD Hello.jpg ./
 ADD config/local.toml ./
 ADD config/token.txt ./
-ADD DB/upgrade.db ./
+ADD config/DbPassword.txt ./
 
 ADD go.mod go.sum* ./
 
@@ -21,7 +21,7 @@ COPY . .
 RUN go get -u gopkg.in/telebot.v3
 RUN go get github.com/BurntSushi/toml@latest
 RUN go get gorm.io/gorm
-RUN go get gorm.io/driver/sqlite
+RUN go get gorm.io/driver/mysql
 RUN go mod vendor
 
 RUN go build -v -mod=vendor -o app main.go
@@ -36,12 +36,10 @@ COPY --from=builder /build/Hello.jpg ./
 RUN mkdir config
 COPY --from=builder /build/config/local.toml ./config/
 COPY --from=builder /build/config/token.txt ./config/
-
-RUN mkdir DB
-COPY --from=builder /build/DB/upgrade.db ./DB/
-RUN apk add sqlite
+COPY --from=builder /build/config/DbPassword.txt ./config/
 
 ARG PORT
 ARG CONFIG
+ARG HOST
 
-CMD /usr/local/bin/app -port=$PORT -config=$CONFIG
+CMD /usr/local/bin/app -port=$PORT -config=$CONFIG -host=$HOST
