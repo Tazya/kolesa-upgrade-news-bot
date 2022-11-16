@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"os"
 )
@@ -16,7 +17,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	}
 	fileBytes, err := os.ReadFile("Hello.jpg")
 	if err != nil {
-		panic(err)
+		log.Fatalf("Ошибка при чтении файла %v", err)
 	}
 	w.Write(fileBytes)
 }
