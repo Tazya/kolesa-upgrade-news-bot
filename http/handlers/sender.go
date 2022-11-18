@@ -2,8 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"log"
+	"io"
 	"net/http"
 )
 
@@ -16,33 +15,27 @@ func Sender(w http.ResponseWriter, r *http.Request) {
 	response := map[string]string{
 		"status": "ok",
 	}
-	jsonResp, err := json.Marshal(response)
-	if err != nil {
-		log.Printf("Error happened in JSON marshal. Err: %s", err)
-		return
-	}
+	jsonResp, _ := json.Marshal(response)
+
 	responseError := map[string]string{
 		"status": "error",
 		"error":  "Bad Request. Message must have body",
 	}
-	jsonRespErr, err := json.Marshal(responseError)
-	if err != nil {
-		log.Printf("Error happened in JSON marshal. Err: %s", err)
-		return
-	}
+	jsonRespErr, _ := json.Marshal(responseError)
+
 	if r.Method != http.MethodPost {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 	res := Message{}
-	err1 := json.Unmarshal(body, &res)
-	if err1 != nil {
-		log.Printf("Ошибка при декодировании сообщений %v", err)
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		w.Write(jsonRespErr)
 		return
 	}
 	if res.Title == "" {
