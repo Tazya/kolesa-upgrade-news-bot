@@ -13,7 +13,6 @@ import (
 
 func main() {
 	port := flag.String("port", "8888", "HTTP port")
-	DbHost := flag.String("host", "localhost", "host name")
 	configPath := flag.String("config", "config/local.toml", "Path to config file")
 	flag.Parse()
 	config := &config.Config{}
@@ -22,7 +21,6 @@ func main() {
 		log.Fatalf("Ошибка декодирования файла конфигов %v", err)
 	}
 	config.Http.Port = *port
-	config.Mysql.DbHost = *DbHost
 
 	var wg sync.WaitGroup
 	wg.Add(2)

@@ -35,9 +35,9 @@ RUN mkdir config
 COPY --from=builder /build/config/local.toml ./config/
 COPY --from=builder /build/config/token.txt ./config/
 COPY --from=builder /build/config/DbPassword.txt ./config/
+COPY --from=builder /build/config/docker.toml ./config/
 
 ARG PORT
 ARG CONFIG
-ARG HOST
 
-CMD /usr/local/bin/app -port=$PORT -config=$CONFIG -host=$HOST
+CMD /usr/local/bin/app -port=$PORT -config=$CONFIG

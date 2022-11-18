@@ -1,14 +1,14 @@
 package config
 
-type http struct {
+type Http struct {
 	Port string
 }
 
-type bot struct {
+type Bot struct {
 	BotToken string
 }
 
-type mysql struct {
+type Mysql struct {
 	DbUser     string
 	DbPassword string
 	DbHost     string
@@ -17,7 +17,7 @@ type mysql struct {
 }
 
 type Config struct {
-	Http  http
-	Bot   bot
-	Mysql mysql
+	Http  Http
+	Bot   Bot
+	Mysql Mysql
 }

@@ -1,6 +1,6 @@
 Bot.BotToken=""
 Mysql.DbUser="root"
 Mysql.DbPassword=""
-Mysql.DbHost="localhost"
+Mysql.DbHost="host.docker.internal"
 Mysql.DbPort="3306"
 Mysql.DbName="news_bot"
