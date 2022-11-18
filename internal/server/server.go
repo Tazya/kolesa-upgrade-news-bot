@@ -7,7 +7,6 @@ import (
 )
 
 func NewServer(config *config.Config) *http.Server {
-
 	mux := http.NewServeMux()
 	handlers.InitRoutes(mux)
 	return &http.Server{
