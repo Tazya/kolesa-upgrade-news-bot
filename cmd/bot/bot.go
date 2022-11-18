@@ -57,12 +57,6 @@ func InitBot(token string) *telebot.Bot {
 	return bot
 }
 
-func GetDsn(config *config.Config) string {
-	Dsn := config.Mysql.DbUser + ":" + config.Mysql.DbPassword + "@tcp(" + config.Mysql.DbHost + ":" + config.Mysql.DbPort + ")/" + config.Mysql.DbName
-
-	return Dsn
-}
-
 func Run(config *config.Config, wg *sync.WaitGroup) {
 	if config.Mysql.DbPassword == "" {
 		password, err := os.ReadFile("config/DbPassword.txt")
@@ -72,7 +66,7 @@ func Run(config *config.Config, wg *sync.WaitGroup) {
 		config.Mysql.DbPassword = string(password)
 	}
 
-	db, err := gorm.Open(mysql.Open(GetDsn(config)), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(getDsn(config)), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД %v", err)
@@ -94,4 +88,10 @@ func Run(config *config.Config, wg *sync.WaitGroup) {
 	upgradeBot.Bot.Handle("/start", upgradeBot.StartHandler)
 	upgradeBot.Bot.Handle("/hello", upgradeBot.HelloHandler)
 	upgradeBot.Bot.Start()
+}
+
+func getDsn(config *config.Config) string {
+	Dsn := config.Mysql.DbUser + ":" + config.Mysql.DbPassword + "@tcp(" + config.Mysql.DbHost + ":" + config.Mysql.DbPort + ")/" + config.Mysql.DbName
+
+	return Dsn
 }

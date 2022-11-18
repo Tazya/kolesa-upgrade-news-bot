@@ -1,7 +1,6 @@
-package tests
+package bot
 
 import (
-	"kolesa-upgrade-team/delivery-bot/cmd/bot"
 	"kolesa-upgrade-team/delivery-bot/config"
 	"testing"
 )
@@ -17,7 +16,7 @@ func TestGetDsn(t *testing.T) {
 		},
 	}
 
-	got := bot.GetDsn(config)
+	got := getDsn(config)
 	want := "root:qwerty@tcp(176.0.0.1:1234)/Upgrade"
 
 	if got != want {
