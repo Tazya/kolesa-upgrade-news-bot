@@ -21,8 +21,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Ошибка декодирования файла конфигов %v", err)
 	}
-	config.Port = *port
-	config.DbHost = *DbHost
+	config.Http.Port = *port
+	config.Mysql.DbHost = *DbHost
 
 	var wg sync.WaitGroup
 	wg.Add(2)

@@ -57,32 +57,37 @@ func InitBot(token string) *telebot.Bot {
 	return bot
 }
 
+func GetDsn(config *config.Config) string {
+	Dsn := config.Mysql.DbUser + ":" + config.Mysql.DbPassword + "@tcp(" + config.Mysql.DbHost + ":" + config.Mysql.DbPort + ")/" + config.Mysql.DbName
+
+	return Dsn
+}
+
 func Run(config *config.Config, wg *sync.WaitGroup) {
-	if config.DbPassword == "" {
+	if config.Mysql.DbPassword == "" {
 		password, err := os.ReadFile("config/DbPassword.txt")
 		if err != nil {
 			log.Fatal(err)
 		}
-		config.DbPassword = string(password)
+		config.Mysql.DbPassword = string(password)
 	}
-	
-	Dsn := config.DbUser + ":" + config.DbPassword + "@tcp(" + config.DbHost + ":" + config.DbPort + ")/" + config.DbName
-	db, err := gorm.Open(mysql.Open(Dsn), &gorm.Config{})
+
+	db, err := gorm.Open(mysql.Open(GetDsn(config)), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД %v", err)
 	}
 
-	if config.BotToken == "" {
+	if config.Bot.BotToken == "" {
 		token, err := os.ReadFile("config/token.txt")
 		if err != nil {
 			log.Fatalf("Ошибка при чтенни токен файла %v", err)
 		}
-		config.BotToken = string(token)
+		config.Bot.BotToken = string(token)
 	}
 
 	upgradeBot := UpgradeBot{
-		Bot:   InitBot(config.BotToken),
+		Bot:   InitBot(config.Bot.BotToken),
 		Users: &models.UserModel{Db: db},
 	}
 

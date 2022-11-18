@@ -8,9 +8,7 @@ RUN apk add --no-cache gcc g++
 WORKDIR /build
 
 ADD Hello.jpg ./
-ADD config/local.toml ./
-ADD config/token.txt ./
-ADD config/DbPassword.txt ./
+ADD config ./
 
 ADD go.mod go.sum* ./
 
