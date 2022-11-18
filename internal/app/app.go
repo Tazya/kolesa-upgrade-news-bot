@@ -9,7 +9,7 @@ import (
 
 func Run(config *config.Config, wg *sync.WaitGroup) {
 	s := server.NewServer(config)
-	log.Printf("http://localhost:" + config.Port + "/")
+	log.Printf("http://localhost:" + config.Http.Port + "/")
 	if err := s.ListenAndServe(); err != nil {
 		log.Fatalf("%v", err)
 	}

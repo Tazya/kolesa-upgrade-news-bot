@@ -20,7 +20,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Ошибка декодирования файла конфигов %v", err)
 	}
-	config.Port = *port
+	config.Http.Port = *port
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go app.Run(config, &wg)

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"gopkg.in/telebot.v3"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -28,7 +28,7 @@ func (bot *UpgradeBot) StartHandler(ctx telebot.Context) error {
 	}
 	existUser, err := bot.Users.FindOne(ctx.Chat().ID)
 	if err != nil {
-		log.Printf("Ошибка получения пользователя %v", err)
+		log.Printf("Ошибка получения пользователя %v.\n Создаю нового =O_o=", err)
 	}
 
 	if existUser == nil {
@@ -58,25 +58,40 @@ func InitBot(token string) *telebot.Bot {
 }
 
 func Run(config *config.Config, wg *sync.WaitGroup) {
-	db, err := gorm.Open(sqlite.Open(config.Dsn), &gorm.Config{})
+	if config.Mysql.DbPassword == "" {
+		password, err := os.ReadFile("config/DbPassword.txt")
+		if err != nil {
+			log.Fatal(err)
+		}
+		config.Mysql.DbPassword = string(password)
+	}
+
+	db, err := gorm.Open(mysql.Open(getDsn(config)), &gorm.Config{})
+
 	if err != nil {
 		log.Fatalf("Ошибка подключения к БД %v", err)
 	}
 
-	if config.BotToken == "" {
+	if config.Bot.BotToken == "" {
 		token, err := os.ReadFile("config/token.txt")
 		if err != nil {
 			log.Fatalf("Ошибка при чтенни токен файла %v", err)
 		}
-		config.BotToken = string(token)
+		config.Bot.BotToken = string(token)
 	}
 
 	upgradeBot := UpgradeBot{
-		Bot:   InitBot(config.BotToken),
+		Bot:   InitBot(config.Bot.BotToken),
 		Users: &models.UserModel{Db: db},
 	}
 
 	upgradeBot.Bot.Handle("/start", upgradeBot.StartHandler)
 	upgradeBot.Bot.Handle("/hello", upgradeBot.HelloHandler)
 	upgradeBot.Bot.Start()
+}
+
+func getDsn(config *config.Config) string {
+	Dsn := config.Mysql.DbUser + ":" + config.Mysql.DbPassword + "@tcp(" + config.Mysql.DbHost + ":" + config.Mysql.DbPort + ")/" + config.Mysql.DbName
+
+	return Dsn
 }
