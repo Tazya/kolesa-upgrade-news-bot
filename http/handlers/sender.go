@@ -16,7 +16,6 @@ func Sender(w http.ResponseWriter, r *http.Request) {
 		"status": "ok",
 	}
 	jsonResp, _ := json.Marshal(response)
-
 	responseError := map[string]string{
 		"status": "error",
 		"error":  "Bad Request. Message must have body",
@@ -27,20 +26,26 @@ func Sender(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
+
 	body, err := io.ReadAll(r.Body)
+
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
+
 	res := Message{}
 	err = json.Unmarshal(body, &res)
+	
 	if err != nil {
 		w.Write(jsonRespErr)
 		return
 	}
-	if res.Title == "" {
-		w.Write(jsonRespErr) // Если заголовок сообщения пустой
+
+	if (res.Body == "") {
+		w.Write(jsonRespErr)
 		return
 	}
+
 	w.Write(jsonResp)
 }
