@@ -5,19 +5,19 @@ type Http struct {
 }
 
 type Bot struct {
-	BotToken string
+	Token string
 }
 
-type Mysql struct {
-	DbUser     string
-	DbPassword string
-	DbHost     string
-	DbPort     string
-	DbName     string
+type DB struct {
+	User     string
+	Password string
+	Host     string
+	Port     string
+	Name     string
 }
 
 type Config struct {
-	Http  Http
-	Bot   Bot
-	Mysql Mysql
+	Http Http
+	Bot  Bot
+	DB   DB
 }

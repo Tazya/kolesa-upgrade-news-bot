@@ -21,3 +21,5 @@ CREATE TABLE IF NOT EXISTS
     );
 
 SELECT * FROM users;
+
+-- DELETE FROM users WHERE id = 1;

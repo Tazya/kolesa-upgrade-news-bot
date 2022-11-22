@@ -7,12 +7,12 @@ import (
 
 func TestGetDsn(t *testing.T) {
 	config := &config.Config{
-		Mysql: config.Mysql{
-			DbUser:     "root",
-			DbPassword: "qwerty",
-			DbHost:     "176.0.0.1",
-			DbPort:     "1234",
-			DbName:     "Upgrade",
+		DB: config.DB{
+			User:     "root",
+			Password: "qwerty",
+			Host:     "176.0.0.1",
+			Port:     "1234",
+			Name:     "Upgrade",
 		},
 	}
 
