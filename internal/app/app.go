@@ -62,6 +62,7 @@ func Run(config *config.Config) {
 	log.Println("Запуск начался. http://localhost:" +  config.Http.Port)
 	handler.Bot.Handle("/start", handler.StartHandler)
 	handler.Bot.Handle("/hello", handler.HelloHandler)
+	handler.Bot.Handle("/secret", handler.SecretHandler)
 	handler.Bot.Start()
 }
 func getDsn(config *config.Config) string {

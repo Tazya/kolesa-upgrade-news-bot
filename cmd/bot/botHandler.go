@@ -93,9 +93,13 @@ func (h *Handler) StartHandler(ctx telebot.Context) error {
 			log.Printf("Ошибка создания пользователя %v", err)
 		}
 	}
-	return ctx.Send("Привет, я дружелюбный бот. Мои команды /hello")
+	return ctx.Send("Привет, я дружелюбный бот. Мои команды /hello, /secret")
 }
 
 func (h *Handler) HelloHandler(ctx telebot.Context) error {
 	return ctx.Send("Привет, " + ctx.Sender().FirstName + " =^_^=")
+}
+
+func (h *Handler) SecretHandler(ctx telebot.Context) error {
+	return ctx.Send("Заходи на http://kolesa.site и отдохни душой")
 }
