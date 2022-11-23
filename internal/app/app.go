@@ -38,11 +38,12 @@ func Run(config *config.Config) {
 		}
 		config.Bot.BotToken = string(token)
 	}
-	handler := &handlers.Handler{
+	handler := &bot.Handler{
 		Bot:  bot.InitBot(config.Bot.BotToken),
 		User: &models.UserModel{Db: db},
 	}
-	handlers.InitRoutes(router, handler)
+	handlers.InitRoutes(router)
+	bot.Route(router, handler)
 
 	server := &http.Server{
 		Addr:         ":" + config.Http.Port,
