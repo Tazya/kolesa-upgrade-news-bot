@@ -1,50 +1,17 @@
 package bot
 
 import (
-	"kolesa-upgrade-team/delivery-bot/config"
-	"kolesa-upgrade-team/delivery-bot/internal/models"
 	"log"
-	"os"
-	"sync"
 	"time"
 
 	"gopkg.in/telebot.v3"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
-type UpgradeBot struct {
-	Bot   *telebot.Bot
-	Users *models.UserModel
-}
-
-func (bot *UpgradeBot) StartHandler(ctx telebot.Context) error {
-	newUser := models.User{
-		Name:       ctx.Sender().Username,
-		TelegramId: ctx.Chat().ID,
-		FirstName:  ctx.Sender().FirstName,
-		LastName:   ctx.Sender().LastName,
-		ChatId:     ctx.Chat().ID,
-	}
-	existUser, err := bot.Users.FindOne(ctx.Chat().ID)
-	if err != nil {
-		log.Printf("Ошибка получения пользователя %v.\n Создаю нового =O_o=", err)
-	}
-
-	if existUser == nil {
-		err := bot.Users.Create(newUser)
-		if err != nil {
-			log.Printf("Ошибка создания пользователя %v", err)
-		}
-	}
-	return ctx.Send("Привет, я дружелюбный бот. Мои команды /hello")
-}
-
-func (bot *UpgradeBot) HelloHandler(ctx telebot.Context) error {
-	return ctx.Send("Привет, " + ctx.Sender().FirstName + " =^_^=")
-}
-
 func InitBot(token string) *telebot.Bot {
+	if token == "" {
+		log.Print("Ошибка при получении токена")
+		return nil
+	}
 	pref := telebot.Settings{
 		Token:  token,
 		Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
@@ -55,43 +22,4 @@ func InitBot(token string) *telebot.Bot {
 	}
 
 	return bot
-}
-
-func Run(config *config.Config, wg *sync.WaitGroup) {
-	if config.DB.Password == "" {
-		password, err := os.ReadFile("config/DbPassword.txt")
-		if err != nil {
-			log.Fatal(err)
-		}
-		config.DB.Password = string(password)
-	}
-
-	db, err := gorm.Open(mysql.Open(getDsn(config)), &gorm.Config{})
-
-	if err != nil {
-		log.Fatalf("Ошибка подключения к БД %v", err)
-	}
-
-	if config.Bot.Token == "" {
-		token, err := os.ReadFile("config/token.txt")
-		if err != nil {
-			log.Fatalf("Ошибка при чтенни токен файла %v", err)
-		}
-		config.Bot.Token = string(token)
-	}
-
-	upgradeBot := UpgradeBot{
-		Bot:   InitBot(config.Bot.Token),
-		Users: &models.UserModel{Db: db},
-	}
-
-	upgradeBot.Bot.Handle("/start", upgradeBot.StartHandler)
-	upgradeBot.Bot.Handle("/hello", upgradeBot.HelloHandler)
-	upgradeBot.Bot.Start()
-}
-
-func getDsn(config *config.Config) string {
-	Dsn := config.DB.User + ":" + config.DB.Password + "@tcp(" + config.DB.Host + ":" + config.DB.Port + ")/" + config.DB.Name
-
-	return Dsn
 }

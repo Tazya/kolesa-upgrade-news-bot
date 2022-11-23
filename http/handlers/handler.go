@@ -7,5 +7,4 @@ import (
 func InitRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/", Home)
 	mux.HandleFunc("/health", Health)
-	mux.HandleFunc("/messages/sendToAll", Sender)
 }
