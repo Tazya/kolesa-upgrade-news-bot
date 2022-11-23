@@ -1,6 +1,9 @@
-Bot.BotToken=""
-Mysql.DbUser="root"
-Mysql.DbPassword=""
-Mysql.DbHost="host.docker.internal"
-Mysql.DbPort="3306"
-Mysql.DbName="news_bot"
+[Bot]
+Token=""
+
+[DB]
+User="root"
+Password=""
+Host="host.docker.internal"
+Port="3306"
+Name="news_bot"

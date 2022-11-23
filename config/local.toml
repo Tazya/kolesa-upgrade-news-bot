@@ -1,6 +1,9 @@
-Bot.BotToken=""
-Mysql.DbUser="root"
-Mysql.DbPassword=""
-Mysql.DbHost="localhost"
-Mysql.DbPort="3306"
-Mysql.DbName="news_bot"
+[Bot]
+BotToken=""
+
+[DB]
+User="root"
+Password=""
+Host="localhost"
+Port="3306"
+Name="news_bot"
