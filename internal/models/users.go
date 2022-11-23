@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"log"
+
+	"gorm.io/gorm"
+)
 
 type User struct {
 	ID         uint
@@ -27,4 +31,13 @@ func (m *UserModel) FindOne(telegramId int64) (*User, error) {
 		return nil, result.Error
 	}
 	return &existUser, nil
+}
+func (m *UserModel) All() []User {
+	var existUser []User
+	result := m.Db.Find(&existUser)
+	if result.Error != nil {
+		log.Printf("Ошибка при получении пользователей %v", result.Error)
+	}
+
+	return existUser
 }

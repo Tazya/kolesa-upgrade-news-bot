@@ -27,6 +27,7 @@
 @FishSev 
 
 ## Как запускать:
+Во первых, вы должны создать внутри директории /config/ token.txt(токен бота) и DbPassword.txt. И потом
 ```bash
 go run . 
 ```
@@ -34,3 +35,5 @@ go run .
 ```bash 
 make build и make run_def 
 ```
+## Ссылка нашего тг бота
+https://t.me/kolesa_z_bot
