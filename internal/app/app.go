@@ -16,12 +16,12 @@ import (
 )
 
 func Run(config *config.Config) {
-	if config.Mysql.DbPassword == "" {
+	if config.DB.Password == "" {
 		password, err := os.ReadFile("config/DbPassword.txt")
 		if err != nil {
 			log.Fatal(err)
 		}
-		config.Mysql.DbPassword = string(password)
+		config.DB.Password = string(password)
 	}
 
 	router := http.NewServeMux()
@@ -31,15 +31,15 @@ func Run(config *config.Config) {
 		return
 	}
 
-	if config.Bot.BotToken == "" {
+	if config.Bot.Token == "" {
 		token, err := os.ReadFile("config/token.txt")
 		if err != nil {
 			log.Fatal(err)
 		}
-		config.Bot.BotToken = string(token)
+		config.Bot.Token = string(token)
 	}
 	handler := &bot.Handler{
-		Bot:  bot.InitBot(config.Bot.BotToken),
+		Bot:  bot.InitBot(config.Bot.Token),
 		User: &models.UserModel{Db: db},
 	}
 	handlers.InitRoutes(router)
@@ -59,13 +59,13 @@ func Run(config *config.Config) {
 			log.Fatalf("Соединение не установлено %v", err)
 		}
 	}()
-	log.Println("Запуск начался")
+	log.Println("Запуск начался. http://localhost:" +  config.Http.Port)
 	handler.Bot.Handle("/start", handler.StartHandler)
 	handler.Bot.Handle("/hello", handler.HelloHandler)
 	handler.Bot.Start()
 }
 func getDsn(config *config.Config) string {
-	Dsn := config.Mysql.DbUser + ":" + config.Mysql.DbPassword + "@tcp(" + config.Mysql.DbHost + ":" + config.Mysql.DbPort + ")/" + config.Mysql.DbName
+	Dsn := config.DB.User + ":" + config.DB.Password + "@tcp(" + config.DB.Host + ":" + config.DB.Port + ")/" + config.DB.Name
 
 	return Dsn
 }
